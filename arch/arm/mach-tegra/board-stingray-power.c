@@ -400,7 +400,7 @@ static struct regulator_init_data cpcap_regulator[CPCAP_NUM_REGULATORS] = {
 	[CPCAP_SW2] = {
 		.constraints = {
 			.min_uV			= 1000000,
-			.max_uV			= 1200000,
+			.max_uV			= 1400000,
 			.valid_ops_mask		= REGULATOR_CHANGE_VOLTAGE,
 			.always_on		= 1,
 		},
@@ -410,7 +410,7 @@ static struct regulator_init_data cpcap_regulator[CPCAP_NUM_REGULATORS] = {
 	[CPCAP_SW4] = {
 		.constraints = {
 			.min_uV			= 1000000,
-			.max_uV			= 1200000,
+			.max_uV			= 1400000,
 			.valid_ops_mask		= REGULATOR_CHANGE_VOLTAGE,
 			.always_on		= 1,
 		},
@@ -642,7 +642,7 @@ struct regulator_init_data max8649_regulator_init_data[] = {
 	{
 		.constraints = {
 			.min_uV			= 770000,
-			.max_uV			= 1100000,
+			.max_uV			= 1350000,
 			.valid_ops_mask		= REGULATOR_CHANGE_VOLTAGE,
 			.always_on		= 1,
 		},
