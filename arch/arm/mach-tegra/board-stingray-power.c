@@ -642,7 +642,7 @@ struct regulator_init_data max8649_regulator_init_data[] = {
 	{
 		.constraints = {
 			.min_uV			= 770000,
-			.max_uV			= 1200000,
+			.max_uV			= 1250000,
 			.valid_ops_mask		= REGULATOR_CHANGE_VOLTAGE,
 			.always_on		= 1,
 		},
