@@ -700,7 +700,7 @@ static void tegra2_pllx_clk_init(struct clk *c)
 	tegra2_pll_clk_init(c);
 
 	if (tegra_sku_id() == 7)
-		c->max_rate = 1400000000;
+		c->max_rate = 1500000000;
 }
 
 static struct clk_ops tegra_pllx_ops = {
@@ -1579,11 +1579,11 @@ static struct clk tegra_pll_u = {
 
 static struct clk_pll_freq_table tegra_pll_x_freq_table[] = {
 
-	/* 1.6 GHz */
-	/*{ 12000000, 1600000000, 800, 6, 1, 12},
-	{ 13000000, 1600000000, 985, 8, 1, 12},
-	{ 19200000, 1600000000, 1000, 12, 1, 8},
-	{ 26000000, 1600000000, 800, 13, 1, 12},*/
+	/* 1.5 GHz */
+	{ 12000000, 1500000000, 750, 6, 1, 12},
+	{ 13000000, 1500000000, 923, 8, 1, 12},
+	{ 19200000, 1500000000, 1000, 8, 1, 8},
+	{ 26000000, 1500000000, 750, 13, 1, 12},
 
 	/* 1.4 GHz */
 	{ 12000000, 1400000000, 700, 6, 1, 12},
@@ -1648,7 +1648,7 @@ static struct clk tegra_pll_x = {
 	.ops       = &tegra_pllx_ops,
 	.reg       = 0xe0,
 	.parent    = &tegra_clk_m,
-	.max_rate  = 1400000000,
+	.max_rate  = 1500000000,
 	.u.pll = {
 		.input_min = 2000000,
 		.input_max = 31000000,
@@ -1797,7 +1797,7 @@ static struct clk tegra_clk_cclk = {
 	.inputs	= mux_cclk,
 	.reg	= 0x20,
 	.ops	= &tegra_super_ops,
-	.max_rate = 1400000000,
+	.max_rate = 1500000000,
 };
 
 static struct clk tegra_clk_sclk = {
@@ -1813,7 +1813,7 @@ static struct clk tegra_clk_virtual_cpu = {
 	.name      = "cpu",
 	.parent    = &tegra_clk_cclk,
 	.ops       = &tegra_cpu_ops,
-	.max_rate  = 1400000000,
+	.max_rate  = 1500000000,
 	.u.cpu = {
 		.main      = &tegra_pll_x,
 		.backup    = &tegra_pll_p,
