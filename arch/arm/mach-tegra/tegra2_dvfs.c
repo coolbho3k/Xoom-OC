@@ -38,7 +38,7 @@ static bool tegra_dvfs_cpu_disabled = true;
 #endif
 
 static const int core_millivolts[MAX_DVFS_FREQS] =
-	{950, 1000, 1100, 1200, 1275, 1300};
+	{950, 1000, 1100, 1200, 1225, 1275, 1300};
 static const int cpu_millivolts[MAX_DVFS_FREQS] =
 	{750, 775, 800, 825, 875,  900,  925,  975,  1000, 1050, 1100, 1125, 1225, 1250};
 
@@ -149,8 +149,8 @@ static struct dvfs dvfs_init[] = {
 	CPU_DVFS("cpu", 2, MHZ, 494, 675, 675, 675, 817, 817, 922, 1000, 1200, 1400, 1504),
 	CPU_DVFS("cpu", 3, MHZ, 730, 760, 845, 845, 1000, 1200, 1400, 1504),
 
-	/* Core voltages (mV):       950,    1000,   1100,   1200,   1275,   1300 */
-	CORE_DVFS("emc",     1, KHZ, 57000,  333000, 333000, 666000, 666000, 666000),
+	/* Core voltages (mV):       950,   1000,   1100,   1200,   1225,   1275,   1300 */
+	CORE_DVFS("emc",     -1, 1, KHZ, 57000,  333000, 380000, 666000, 666000, 666000, 666000),
 
 #if 0
 	/*
@@ -159,22 +159,22 @@ static struct dvfs dvfs_init[] = {
 	 * For now, boards must ensure that the core voltage does not drop
 	 * below 1V, or that the sdmmc busses are set to 44 MHz or less.
 	 */
-	CORE_DVFS("sdmmc1",  1, KHZ, 44000,  52000,  52000,  52000,  52000),
-	CORE_DVFS("sdmmc2",  1, KHZ, 44000,  52000,  52000,  52000,  52000),
-	CORE_DVFS("sdmmc3",  1, KHZ, 44000,  52000,  52000,  52000,  52000),
-	CORE_DVFS("sdmmc4",  1, KHZ, 44000,  52000,  52000,  52000,  52000),
+	CORE_DVFS("sdmmc1",  1, KHZ, 44000,  52000,  52000,  52000,  52000,  52000,  52000),
+	CORE_DVFS("sdmmc2",  1, KHZ, 44000,  52000,  52000,  52000,  52000,  52000,  52000),
+	CORE_DVFS("sdmmc3",  1, KHZ, 44000,  52000,  52000,  52000,  52000,  52000,  52000),
+	CORE_DVFS("sdmmc4",  1, KHZ, 44000,  52000,  52000,  52000,  52000,  52000,  52000),
 #endif
 
-	CORE_DVFS("ndflash", 1, KHZ, 130000, 150000, 158000, 164000, 164000, 164000),
-	CORE_DVFS("nor",     1, KHZ, 0,      92000,  92000,  92000,  92000, 92000),
-	CORE_DVFS("ide",     1, KHZ, 0,      0,      100000, 100000, 100000, 100000),
-	CORE_DVFS("mipi",    1, KHZ, 0,      40000,  40000,  40000, 60000, 60000),
-	CORE_DVFS("usbd",    1, KHZ, 0,      0,      0,      480000, 480000, 480000),
-	CORE_DVFS("usb2",    1, KHZ, 0,      0,      0,      480000, 480000, 480000),
-	CORE_DVFS("usb3",    1, KHZ, 0,      0,      0,      480000, 480000, 480000),
-	CORE_DVFS("pcie",    1, KHZ, 0,      0,      0,      250000, 250000, 250000),
-	CORE_DVFS("dsi",     1, KHZ, 100000, 100000, 100000, 500000, 500000, 500000),
-	CORE_DVFS("tvo",     1, KHZ, 0,      0,      0,      250000, 250000, 250000),
+	CORE_DVFS("ndflash", 1, KHZ, 130000, 150000, 158000, 164000, 164000, 164000, 164000),
+	CORE_DVFS("nor",     1, KHZ, 0,      92000,  92000,  92000,  92000,  92000,  92000),
+	CORE_DVFS("ide",     1, KHZ, 0,      0,      100000, 100000, 100000, 100000, 100000),
+	CORE_DVFS("mipi",    1, KHZ, 0,      40000,  40000,  40000,  40000,  60000,  60000),
+	CORE_DVFS("usbd",    1, KHZ, 0,      0,      0,      480000, 480000, 480000, 480000),
+	CORE_DVFS("usb2",    1, KHZ, 0,      0,      0,      480000, 480000, 480000, 480000),
+	CORE_DVFS("usb3",    1, KHZ, 0,      0,      0,      480000, 480000, 480000, 480000),
+	CORE_DVFS("pcie",    1, KHZ, 0,      0,      0,      250000, 250000, 250000, 250000),
+	CORE_DVFS("dsi",     1, KHZ, 100000, 100000, 100000, 500000, 500000, 500000, 500000),
+	CORE_DVFS("tvo",     1, KHZ, 0,      0,      0,      250000, 250000, 250000, 250000),
 
 	/*
 	 * The clock rate for the display controllers that determines the
@@ -182,22 +182,22 @@ static struct dvfs dvfs_init[] = {
 	 * to the display block.  Disable auto-dvfs on the display clocks,
 	 * and let the display driver call tegra_dvfs_set_rate manually
 	 */
-	CORE_DVFS("disp1",   0, KHZ, 158000, 158000, 190000, 190000, 190000, 190000),
-	CORE_DVFS("disp2",   0, KHZ, 158000, 158000, 190000, 190000, 190000, 190000),
-	CORE_DVFS("hdmi",    0, KHZ, 0,      0,      0,      148500, 148500, 148500),
+	CORE_DVFS("disp1",   0, KHZ, 158000, 158000, 190000, 190000, 190000, 190000, 190000),
+	CORE_DVFS("disp2",   0, KHZ, 158000, 158000, 190000, 190000, 190000, 190000, 190000),
+	CORE_DVFS("hdmi",    0, KHZ, 0,      0,      0,      148500, 148500, 148500, 190000),
 
 	/*
 	 * These clocks technically depend on the core process id,
 	 * but just use the worst case value for now
 	 */
-	CORE_DVFS("host1x",  1, KHZ, 104500, 133000, 166000, 166000, 166000, 166000),
-	CORE_DVFS("epp",     1, KHZ, 133000, 171000, 247000, 300000, 300000, 300000),
-	CORE_DVFS("2d",      1, KHZ, 133000, 171000, 247000, 300000, 300000, 300000),
-	CORE_DVFS("3d",      1, KHZ, 114000, 161500, 247000, 300000, 300000, 300000),
-	CORE_DVFS("mpe",     1, KHZ, 104500, 152000, 228000, 250000, 250000, 250000),
-	CORE_DVFS("vi",      1, KHZ, 85000,  100000, 150000, 150000, 150000, 150000),
-	CORE_DVFS("sclk",    1, KHZ, 95000,  133000, 190000, 250000, 250000, 250000),
-	CORE_DVFS("vde",     1, KHZ, 95000,  123500, 209000, 250000, 250000, 250000),
+	CORE_DVFS("host1x",  1, KHZ, 104500, 133000, 166000, 166000, 166000, 166000, 166000),
+	CORE_DVFS("epp",     1, KHZ, 133000, 171000, 247000, 300000, 300000, 300000, 300000),
+	CORE_DVFS("2d",      1, KHZ, 133000, 171000, 247000, 300000, 300000, 300000, 300000),
+	CORE_DVFS("3d",      1, KHZ, 114000, 161500, 247000, 304000, 304000, 333500, 333500),
+	CORE_DVFS("mpe",     1, KHZ, 104500, 152000, 228000, 300000, 300000, 300000, 300000),
+	CORE_DVFS("vi",      1, KHZ, 85000,  100000, 150000, 150000, 150000, 150000, 150000),
+	CORE_DVFS("sclk",    1, KHZ, 95000,  133000, 190000, 250000, 250000, 250000, 262000),
+	CORE_DVFS("vde",     1, KHZ, 95000,  123500, 209000, 275500, 275500, 300000, 300000),
 	/* What is this? */
 	CORE_DVFS("NVRM_DEVID_CLK_SRC", 1, MHZ, 480, 600, 800, 1067, 1067, 1067),
 };
