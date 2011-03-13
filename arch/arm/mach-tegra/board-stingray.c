@@ -80,6 +80,7 @@
 
 #define USB_MANUFACTURER_NAME           "Motorola"
 #define USB_PRODUCT_NAME                "MZ600"
+#define USB_PRODUCT_NAME_WIFI_ONLY      "MZ604"
 #define USB_PRODUCT_ID_BLAN             0x70A3
 #define USB_PRODUCT_ID_MTP              0x70A8
 #define USB_PRODUCT_ID_MTP_ADB          0x70A9
@@ -718,6 +719,38 @@ static int __init mot_bm_recovery_setup(char *options)
 }
 __setup("rec", mot_bm_recovery_setup);
 
+#define PRODUCT_TYPE_MAX_LEN 4
+static char product_type[PRODUCT_TYPE_MAX_LEN + 1] = "cw";
+static int __init stingray_product_type_parse(char *s)
+{
+	strncpy(product_type, s, PRODUCT_TYPE_MAX_LEN);
+	product_type[PRODUCT_TYPE_MAX_LEN] = '\0';
+	printk(KERN_INFO "product_type=%s\n", product_type);
+
+	return 1;
+}
+__setup("product_type=", stingray_product_type_parse);
+
+bool stingray_hw_has_cdma(void)
+{
+	return strstr(product_type, "c") != NULL;
+}
+
+bool stingray_hw_has_lte(void)
+{
+	return strstr(product_type, "l") != NULL;
+}
+
+bool stingray_hw_has_wifi(void)
+{
+	return strstr(product_type, "w") != NULL;
+}
+
+bool stingray_hw_has_umts(void)
+{
+	return strstr(product_type, "u") != NULL;
+}
+
 static void stingray_usb_init(void)
 {
 	char *src;
@@ -732,8 +765,12 @@ static void stingray_usb_init(void)
 	if (strncmp(boot_mode, "factorycable", BOOT_MODE_MAX_LEN) ||
             !mot_boot_recovery)
 		platform_device_register(&tegra_udc_device);
-	platform_device_register(&tegra_ehci2_device);
+
+	if (stingray_hw_has_cdma())
+		platform_device_register(&tegra_ehci2_device);
+
 	platform_device_register(&tegra_ehci3_device);
+
 #ifdef CONFIG_USB_ANDROID_RNDIS
 	src = usb_serial_num;
 
@@ -757,6 +794,9 @@ static void stingray_usb_init(void)
 	else {
 		platform_data = &andusb_plat;
 	}
+
+	if (!stingray_hw_has_cdma())
+		platform_data->product_name = USB_PRODUCT_NAME_WIFI_ONLY;
 
 	platform_data->serial_number = usb_serial_num;
 	androidusb_device.dev.platform_data = platform_data;
